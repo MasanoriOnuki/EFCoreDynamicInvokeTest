@@ -88,8 +88,16 @@ namespace TestApp
                 results.Add(argumentCount, TestDynamicInvoke(types));
             }
 
-            Console.Out.Write($"Number of arguments when first failed : {results.First(r => !r.Value).Key, 2}");
+            if (results.Any(r => !r.Value))
+            {
+                Console.Out.Write($"Number of arguments when first failed : {results.First(r => !r.Value).Key, 2}");
+            }
+            else
+            {
+                Console.Out.Write($"Number of arguments when first failed : No");
+            }
             Console.Out.Write($"	Size of Type: {(type.IsValueType ? SizeOf<T>().ToString() : "N/A"), 3}");
+            Console.Out.Write($"	Last: {results.Last().Key, 2}");
             Console.Out.WriteLine($"	Type: {type}");
         }
 
