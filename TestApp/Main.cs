@@ -63,8 +63,8 @@ namespace TestApp
             SameTypeTest<Size24?>(maxArgumentCount);
             SameTypeTest<Size28?>(maxArgumentCount);
             SameTypeTest<Size32?>(maxArgumentCount);
-            //SameTypeTest<Size36?>(maxArgumentCount); // error: * Assertion at /Users/builder/data/lanes/5024/152b654a/source/xamarin-macios/external/mono/mono/mini/mini-arm64.c:1621, condition `buffer_offset <= 256' not met
-            //SameTypeTest<Size40?>(maxArgumentCount); // ditto.
+            SameTypeTest<Size36?>(maxArgumentCount);
+            SameTypeTest<Size40?>(maxArgumentCount);
             SameTypeTest<string>(maxArgumentCount);
             SameTypeTest<Klass>(maxArgumentCount);
             SameTypeTest<GenericKlass<int>>(maxArgumentCount);
@@ -79,6 +79,11 @@ namespace TestApp
 
             foreach (var argumentCount in Enumerable.Range(1, maxArgumentCount))
             {
+                if (type.IsValueType && SizeOf<T>() * argumentCount >= 256)
+                {
+                    break;
+                }
+
                 var types = Enumerable.Repeat(type, argumentCount).ToArray();
                 results.Add(argumentCount, TestDynamicInvoke(types));
             }
